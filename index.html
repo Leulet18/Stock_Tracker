@@ -7,373 +7,84 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --bg: #0d0d0f;
     --surface: #16161a;
     --card: #1c1c22;
     --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.14);
     --text: #f0f0f2;
     --muted: #7a7a8a;
     --green: #00d17a;
     --red: #ff4d4d;
     --accent: #00d17a;
-    --accent-dim: rgba(0,209,122,0.1);
   }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    min-height: 100vh;
-    padding: 0;
-  }
-
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  header .logo {
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-    color: var(--text);
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+  header .logo { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
   header .logo span { color: var(--accent); }
-
-  .search-wrap {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .search-wrap input {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    width: 200px;
-    outline: none;
-    transition: border 0.15s;
-  }
-
+  .search-wrap { display: flex; gap: 8px; align-items: center; }
+  .search-wrap input { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; font-size: 14px; width: 200px; outline: none; transition: border 0.15s; }
   .search-wrap input:focus { border-color: var(--accent); }
-
-  .search-wrap button {
-    background: var(--accent);
-    color: #000;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
+  .search-wrap button { background: var(--accent); color: #000; border: none; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
   .search-wrap button:hover { opacity: 0.85; }
-
   main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
-
-  .hero {
-    margin-bottom: 2rem;
-  }
-
-  .ticker-label {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  .price-big {
-    font-size: 52px;
-    font-weight: 700;
-    letter-spacing: -2px;
-    line-height: 1;
-  }
-
-  .change-badge {
-    font-size: 16px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 6px;
-  }
-
+  .hero { margin-bottom: 2rem; }
+  .ticker-label { font-size: 13px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .price-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .price-big { font-size: 52px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
+  .change-badge { font-size: 16px; font-weight: 600; padding: 4px 10px; border-radius: 6px; }
   .change-badge.up { background: rgba(0,209,122,0.12); color: var(--green); }
   .change-badge.down { background: rgba(255,77,77,0.12); color: var(--red); }
-
-  .company-name {
-    font-size: 14px;
-    color: var(--muted);
-    margin-top: 6px;
-  }
-
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-    margin-bottom: 2rem;
-  }
-
-  .metric {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-  }
-
-  .metric .mlabel {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 8px;
-  }
-
-  .metric .mval {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .metric .msub {
-    font-size: 12px;
-    margin-top: 4px;
-    color: var(--muted);
-  }
-
+  .company-name { font-size: 14px; color: var(--muted); margin-top: 6px; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 2rem; }
+  .metric { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
+  .metric .mlabel { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .metric .mval { font-size: 22px; font-weight: 600; color: var(--text); }
+  .metric .msub { font-size: 12px; margin-top: 4px; color: var(--muted); }
   .mval.up { color: var(--green); }
   .mval.down { color: var(--red); }
-
-  .chart-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .chart-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--muted);
-  }
-
-  .range-tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--surface);
-    border-radius: 8px;
-    padding: 3px;
-  }
-
-  .range-tabs button {
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .range-tabs button.active {
-    background: var(--card);
-    color: var(--text);
-  }
-
+  .chart-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 2rem; }
+  .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px; }
+  .chart-title { font-size: 14px; font-weight: 500; color: var(--muted); }
+  .range-tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 8px; padding: 3px; }
+  .range-tabs button { background: transparent; border: none; color: var(--muted); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  .range-tabs button.active { background: var(--card); color: var(--text); }
   .chart-wrap { position: relative; height: 300px; }
-
-  .bottom-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 12px;
-  }
-
-  .info-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.25rem;
-  }
-
-  .info-card .card-title {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 14px;
-  }
-
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-  }
-
+  .bottom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; }
+  .info-card .card-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
   .info-row:last-child { border-bottom: none; }
   .info-row .ikey { color: var(--muted); }
   .info-row .ival { font-weight: 500; }
-
-  .status-bar {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    display: inline-block;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  .error {
-    background: rgba(255,77,77,0.1);
-    border: 1px solid rgba(255,77,77,0.25);
-    color: var(--red);
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 14px;
-    margin-bottom: 1.5rem;
-    display: none;
-  }
-
-  .mean-reversion-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.25rem;
-    margin-bottom: 2rem;
-  }
-
-  .mean-reversion-card .card-title {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 14px;
-  }
-
-  .signal-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .signal-pill {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 20px;
-  }
-
+  .status-bar { font-size: 12px; color: var(--muted); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+  .dot.error { background: var(--red); animation: none; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .error-box { background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.25); color: var(--red); padding: 12px 16px; border-radius: 10px; font-size: 14px; margin-bottom: 1.5rem; display: none; }
+  .mean-reversion-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; margin-bottom: 2rem; }
+  .mean-reversion-card .card-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+  .signal-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .signal-pill { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
   .signal-pill.discount { background: rgba(0,209,122,0.12); color: var(--green); }
   .signal-pill.premium { background: rgba(255,77,77,0.12); color: var(--red); }
   .signal-pill.neutral { background: rgba(120,120,140,0.15); color: var(--muted); }
-
   .signal-desc { font-size: 13px; color: var(--muted); }
-
-  .sparkbar-wrap {
-    margin-top: 12px;
-    position: relative;
-    height: 6px;
-    background: var(--surface);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .sparkbar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.5s ease;
-  }
-
-  .sparkbar-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 5px;
-  }
-
-  .watchlist-quick {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 0;
-  }
-
-  .watchlist-quick button {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .watchlist-quick button:hover {
-    border-color: var(--accent);
-    color: var(--text);
-  }
-
-  .quick-label {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
+  .sparkbar-wrap { margin-top: 12px; position: relative; height: 6px; background: var(--surface); border-radius: 3px; overflow: hidden; }
+  .sparkbar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+  .sparkbar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 5px; }
+  .quick-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .watchlist-quick { display: flex; gap: 6px; flex-wrap: wrap; }
+  .watchlist-quick button { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .watchlist-quick button:hover { border-color: var(--accent); color: var(--text); }
+  .loading-overlay { position: fixed; inset: 0; background: rgba(13,13,15,0.7); display: flex; align-items: center; justify-content: center; z-index: 100; display: none; }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
+
+<div class="loading-overlay" id="loading-overlay"><div class="spinner"></div></div>
 
 <header>
   <div class="logo">stock<span>track</span></div>
@@ -385,13 +96,13 @@
 
 <main>
   <div class="status-bar">
-    <span class="dot"></span>
+    <span class="dot" id="status-dot"></span>
     <span id="status-text">Loading NVDA...</span>
   </div>
 
-  <div class="error" id="error-msg"></div>
+  <div class="error-box" id="error-msg"></div>
 
-  <div class="hero" id="hero-section">
+  <div class="hero">
     <div class="ticker-label" id="hero-ticker">NVDA</div>
     <div class="price-row">
       <div class="price-big" id="hero-price">—</div>
@@ -400,11 +111,11 @@
     <div class="company-name" id="hero-name">—</div>
   </div>
 
-  <div class="metrics" id="metrics-grid">
+  <div class="metrics">
     <div class="metric"><div class="mlabel">2-month high</div><div class="mval" id="m-high">—</div></div>
     <div class="metric"><div class="mlabel">2-month low</div><div class="mval" id="m-low">—</div></div>
     <div class="metric"><div class="mlabel">1-year avg</div><div class="mval" id="m-avg">—</div></div>
-    <div class="metric"><div class="mlabel">vs 1yr avg</div><div class="mval" id="m-vs-avg">—</div><div class="msub" id="m-vs-sub">—</div></div>
+    <div class="metric"><div class="mlabel">vs 1yr avg</div><div class="mval" id="m-vs-avg">—</div><div class="msub" id="m-vs-sub"></div></div>
     <div class="metric"><div class="mlabel">52-week high</div><div class="mval" id="m-52h">—</div></div>
     <div class="metric"><div class="mlabel">52-week low</div><div class="mval" id="m-52l">—</div></div>
   </div>
@@ -412,8 +123,8 @@
   <div class="mean-reversion-card">
     <div class="card-title">Mean reversion signal</div>
     <div class="signal-row">
-      <div class="signal-pill neutral" id="signal-pill">Loading</div>
-      <div class="signal-desc" id="signal-desc">Calculating position vs historical average...</div>
+      <div class="signal-pill neutral" id="signal-pill">—</div>
+      <div class="signal-desc" id="signal-desc">Load a stock to see the signal</div>
     </div>
     <div class="sparkbar-wrap">
       <div class="sparkbar-fill" id="sparkbar-fill" style="width: 50%; background: #888;"></div>
@@ -436,26 +147,26 @@
       </div>
     </div>
     <div class="chart-wrap">
-      <canvas id="priceChart" role="img" aria-label="Price history line chart">Price history chart</canvas>
+      <canvas id="priceChart" role="img" aria-label="Price history chart">Price history</canvas>
     </div>
   </div>
 
   <div class="bottom-grid">
     <div class="info-card">
       <div class="card-title">Key stats</div>
-      <div class="info-row"><span class="ikey">Market cap</span><span class="ival" id="s-mktcap">—</span></div>
-      <div class="info-row"><span class="ikey">P/E ratio</span><span class="ival" id="s-pe">—</span></div>
-      <div class="info-row"><span class="ikey">EPS (TTM)</span><span class="ival" id="s-eps">—</span></div>
-      <div class="info-row"><span class="ikey">Avg volume</span><span class="ival" id="s-vol">—</span></div>
-      <div class="info-row"><span class="ikey">Beta</span><span class="ival" id="s-beta">—</span></div>
+      <div class="info-row"><span class="ikey">Open</span><span class="ival" id="s-open">—</span></div>
+      <div class="info-row"><span class="ikey">Previous close</span><span class="ival" id="s-prev">—</span></div>
+      <div class="info-row"><span class="ikey">Day high</span><span class="ival" id="s-dh">—</span></div>
+      <div class="info-row"><span class="ikey">Day low</span><span class="ival" id="s-dl">—</span></div>
+      <div class="info-row"><span class="ikey">Volume</span><span class="ival" id="s-vol">—</span></div>
     </div>
     <div class="info-card">
       <div class="card-title">Company</div>
       <div class="info-row"><span class="ikey">Name</span><span class="ival" id="s-name">—</span></div>
-      <div class="info-row"><span class="ikey">Exchange</span><span class="ival" id="s-exch">—</span></div>
+      <div class="info-row"><span class="ikey">Sector</span><span class="ival" id="s-sector">—</span></div>
       <div class="info-row"><span class="ikey">Industry</span><span class="ival" id="s-ind">—</span></div>
-      <div class="info-row"><span class="ikey">Country</span><span class="ival" id="s-country">—</span></div>
-      <div class="info-row"><span class="ikey">Currency</span><span class="ival" id="s-currency">—</span></div>
+      <div class="info-row"><span class="ikey">Exchange</span><span class="ival" id="s-exch">—</span></div>
+      <div class="info-row"><span class="ikey">Market cap</span><span class="ival" id="s-mktcap">—</span></div>
     </div>
     <div class="info-card">
       <div class="card-title">Quick watchlist</div>
@@ -475,9 +186,10 @@
 </main>
 
 <script>
-const API_KEY = 'd8ndi6hr01qvvn9624k0d8ndi6hr01qvvn9624kg';
+const API_KEY = 'ALK8KIPS27GES7A5';
 let chartInstance = null;
-let fullCandles = [];
+let allDates = [];
+let allPrices = [];
 let currentRange = 60;
 
 function fmtPrice(n) {
@@ -490,7 +202,7 @@ function fmtLarge(n) {
   if (n >= 1e12) return '$' + (n / 1e12).toFixed(2) + 'T';
   if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
   if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
-  return n.toLocaleString();
+  return '$' + n.toLocaleString();
 }
 
 function fmtVol(n) {
@@ -501,14 +213,19 @@ function fmtVol(n) {
   return n.toString();
 }
 
-function setStatus(msg) {
+function setStatus(msg, isError) {
   document.getElementById('status-text').textContent = msg;
+  document.getElementById('status-dot').className = 'dot' + (isError ? ' error' : '');
 }
 
 function showError(msg) {
   const el = document.getElementById('error-msg');
   el.textContent = msg;
   el.style.display = msg ? 'block' : 'none';
+}
+
+function setLoading(on) {
+  document.getElementById('loading-overlay').style.display = on ? 'flex' : 'none';
 }
 
 function switchTo(ticker) {
@@ -520,61 +237,73 @@ function setRange(days, btn) {
   currentRange = days;
   document.querySelectorAll('.range-tabs button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderChart(fullCandles, days);
+  renderChart(allDates, allPrices, days);
 }
 
 async function loadStock() {
   const ticker = document.getElementById('ticker-input').value.trim().toUpperCase();
   if (!ticker) return;
   showError('');
-  setStatus('Loading ' + ticker + '...');
+  setStatus('Loading ' + ticker + '...', false);
+  setLoading(true);
   document.getElementById('hero-ticker').textContent = ticker;
   document.getElementById('chart-title').textContent = ticker + ' price history';
 
-  const to = Math.floor(Date.now() / 1000);
-  const from = to - (370 * 24 * 3600);
-
   try {
-    const [candleRes, profileRes, metricsRes, quoteRes] = await Promise.all([
-      fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${ticker}&resolution=D&from=${from}&to=${to}&token=${API_KEY}`),
-      fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${ticker}&token=${API_KEY}`),
-      fetch(`https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all&token=${API_KEY}`),
-      fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${API_KEY}`)
+    const [dailyRes, quoteRes, overviewRes] = await Promise.all([
+      fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&outputsize=full&apikey=${API_KEY}`),
+      fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${API_KEY}`),
+      fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${API_KEY}`)
     ]);
 
-    const candle = await candleRes.json();
-    const profile = await profileRes.json();
-    const metrics = await metricsRes.json();
-    const quote = await quoteRes.json();
+    const daily = await dailyRes.json();
+    const quoteData = await quoteRes.json();
+    const overview = await overviewRes.json();
 
-    if (candle.s === 'no_data' || !candle.c || !candle.c.length) {
-      showError('No data found for "' + ticker + '". Check the ticker and try again.');
-      setStatus('No data');
+    const timeSeries = daily['Time Series (Daily)'];
+    if (!timeSeries) {
+      const note = daily['Note'] || daily['Information'];
+      if (note && note.includes('rate limit')) {
+        showError('API rate limit hit. Alpha Vantage free tier allows 25 requests/day. Wait a minute and try again.');
+      } else {
+        showError('No data found for "' + ticker + '". Check the ticker symbol.');
+      }
+      setStatus('Error', true);
+      setLoading(false);
       return;
     }
 
-    fullCandles = candle;
-    renderChart(candle, currentRange);
-    updateMetrics(candle, quote, metrics);
-    updateInfo(profile, metrics);
-    updateSignal(candle, quote, metrics);
-    setStatus(ticker + ' — data via Finnhub (15min delay)');
+    const dates = Object.keys(timeSeries).sort();
+    const prices = dates.map(d => parseFloat(timeSeries[d]['4. close']));
+
+    allDates = dates;
+    allPrices = prices;
+
+    renderChart(dates, prices, currentRange);
+    updateMetrics(dates, prices, quoteData['Global Quote'] || {}, overview);
+    updateSignal(prices, overview);
+    updateInfo(quoteData['Global Quote'] || {}, overview);
+    setStatus(ticker + ' — data via Alpha Vantage', false);
 
   } catch (e) {
     showError('Could not load data. Check your internet connection.');
-    setStatus('Error');
+    setStatus('Error', true);
   }
+
+  setLoading(false);
 }
 
-function renderChart(candle, days) {
-  const total = candle.t.length;
-  const slice = Math.min(days, total);
-  const labels = candle.t.slice(-slice).map(t => {
-    const d = new Date(t * 1000);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+function renderChart(dates, prices, days) {
+  const slice = Math.max(0, dates.length - days);
+  const slicedDates = dates.slice(slice);
+  const slicedPrices = prices.slice(slice);
+
+  const labels = slicedDates.map(d => {
+    const dt = new Date(d);
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   });
-  const prices = candle.c.slice(-slice);
-  const isUp = prices[prices.length - 1] >= prices[0];
+
+  const isUp = slicedPrices[slicedPrices.length - 1] >= slicedPrices[0];
   const lineColor = isUp ? '#00d17a' : '#ff4d4d';
   const fillColor = isUp ? 'rgba(0,209,122,0.07)' : 'rgba(255,77,77,0.07)';
 
@@ -585,7 +314,7 @@ function renderChart(candle, days) {
       labels,
       datasets: [{
         label: 'Close',
-        data: prices,
+        data: slicedPrices,
         borderColor: lineColor,
         borderWidth: 2,
         pointRadius: 0,
@@ -599,9 +328,7 @@ function renderChart(candle, days) {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: {
-          callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(2) }
-        }
+        tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(2) } }
       },
       scales: {
         x: {
@@ -617,18 +344,18 @@ function renderChart(candle, days) {
   });
 }
 
-function updateMetrics(candle, quote, metrics) {
-  const closes = candle.c;
-  const slice60 = closes.slice(-60);
-  const avg1y = closes.reduce((a, b) => a + b, 0) / closes.length;
+function updateMetrics(dates, prices, quote, overview) {
+  const last60 = prices.slice(-60);
+  const last252 = prices.slice(-252);
 
-  const high2m = Math.max(...slice60);
-  const low2m = Math.min(...slice60);
+  const high2m = Math.max(...last60);
+  const low2m = Math.min(...last60);
+  const avg1y = last252.reduce((a, b) => a + b, 0) / last252.length;
 
-  const current = quote.c;
-  const prevClose = quote.pc;
-  const change = current - prevClose;
-  const changePct = (change / prevClose * 100);
+  const current = parseFloat(quote['05. price']) || prices[prices.length - 1];
+  const prev = parseFloat(quote['08. previous close']) || 0;
+  const change = current - prev;
+  const changePct = prev ? (change / prev * 100) : 0;
   const vsAvg = ((current - avg1y) / avg1y * 100);
 
   document.getElementById('hero-price').textContent = fmtPrice(current);
@@ -638,40 +365,33 @@ function updateMetrics(candle, quote, metrics) {
 
   document.getElementById('m-high').textContent = fmtPrice(high2m);
   document.getElementById('m-low').textContent = fmtPrice(low2m);
-  document.getElementById('m-avg').textContent = fmtPrice(avg1y.toFixed(2));
+  document.getElementById('m-avg').textContent = fmtPrice(avg1y);
 
   const vsEl = document.getElementById('m-vs-avg');
   vsEl.textContent = (vsAvg >= 0 ? '+' : '') + vsAvg.toFixed(1) + '%';
   vsEl.className = 'mval ' + (vsAvg >= 0 ? 'up' : 'down');
   document.getElementById('m-vs-sub').textContent = vsAvg < 0 ? 'Below average' : 'Above average';
 
-  const m = metrics.metric || {};
-  document.getElementById('m-52h').textContent = fmtPrice(m['52WeekHigh']);
-  document.getElementById('m-52l').textContent = fmtPrice(m['52WeekLow']);
-  document.getElementById('s-pe').textContent = m.peBasicExclExtraTTM ? m.peBasicExclExtraTTM.toFixed(1) : '—';
-  document.getElementById('s-eps').textContent = m.epsTTM ? '$' + m.epsTTM.toFixed(2) : '—';
-  document.getElementById('s-vol').textContent = fmtVol(m.averageVolume);
-  document.getElementById('s-beta').textContent = m.beta ? m.beta.toFixed(2) : '—';
+  const w52h = overview['52WeekHigh'] || Math.max(...prices.slice(-252));
+  const w52l = overview['52WeekLow'] || Math.min(...prices.slice(-252));
+  document.getElementById('m-52h').textContent = fmtPrice(w52h);
+  document.getElementById('m-52l').textContent = fmtPrice(w52l);
+
+  document.getElementById('s-open').textContent = fmtPrice(quote['02. open']);
+  document.getElementById('s-prev').textContent = fmtPrice(quote['08. previous close']);
+  document.getElementById('s-dh').textContent = fmtPrice(quote['03. high']);
+  document.getElementById('s-dl').textContent = fmtPrice(quote['04. low']);
+  document.getElementById('s-vol').textContent = fmtVol(parseInt(quote['06. volume']));
 }
 
-function updateInfo(profile, metrics) {
-  document.getElementById('hero-name').textContent = profile.name || '—';
-  document.getElementById('s-name').textContent = profile.name || '—';
-  document.getElementById('s-exch').textContent = profile.exchange || '—';
-  document.getElementById('s-ind').textContent = profile.finnhubIndustry || '—';
-  document.getElementById('s-country').textContent = profile.country || '—';
-  document.getElementById('s-currency').textContent = profile.currency || '—';
-  document.getElementById('s-mktcap').textContent = profile.marketCapitalization ? fmtLarge(profile.marketCapitalization * 1e6) : '—';
-}
-
-function updateSignal(candle, quote, metrics) {
-  const closes = candle.c;
-  const avg1y = closes.reduce((a, b) => a + b, 0) / closes.length;
-  const current = quote.c;
-  const m = metrics.metric || {};
-  const low52 = m['52WeekLow'] || Math.min(...closes);
-  const high52 = m['52WeekHigh'] || Math.max(...closes);
+function updateSignal(prices, overview) {
+  const last252 = prices.slice(-252);
+  const avg1y = last252.reduce((a, b) => a + b, 0) / last252.length;
+  const current = prices[prices.length - 1];
   const vsAvg = ((current - avg1y) / avg1y * 100);
+
+  const low52 = parseFloat(overview['52WeekLow']) || Math.min(...last252);
+  const high52 = parseFloat(overview['52WeekHigh']) || Math.max(...last252);
 
   const pill = document.getElementById('signal-pill');
   const desc = document.getElementById('signal-desc');
@@ -683,7 +403,7 @@ function updateSignal(candle, quote, metrics) {
   if (vsAvg < -10) {
     pill.textContent = 'Potential discount';
     pill.className = 'signal-pill discount';
-    desc.textContent = vsAvg.toFixed(1) + '% below 1-year average. Could be a mean reversion entry point.';
+    desc.textContent = vsAvg.toFixed(1) + '% below 1-year average. Could be a mean reversion entry.';
     bar.style.background = '#00d17a';
   } else if (vsAvg > 10) {
     pill.textContent = 'Trading at premium';
@@ -699,6 +419,16 @@ function updateSignal(candle, quote, metrics) {
 
   document.getElementById('sb-low').textContent = '52W: ' + fmtPrice(low52);
   document.getElementById('sb-high').textContent = '52W: ' + fmtPrice(high52);
+}
+
+function updateInfo(quote, overview) {
+  document.getElementById('hero-name').textContent = overview['Name'] || '—';
+  document.getElementById('s-name').textContent = overview['Name'] || '—';
+  document.getElementById('s-sector').textContent = overview['Sector'] || '—';
+  document.getElementById('s-ind').textContent = overview['Industry'] || '—';
+  document.getElementById('s-exch').textContent = overview['Exchange'] || '—';
+  const mc = overview['MarketCapitalization'];
+  document.getElementById('s-mktcap').textContent = mc ? fmtLarge(parseInt(mc)) : '—';
 }
 
 loadStock();
